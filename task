@@ -1,0 +1,76 @@
+#!/bin/bash
+
+dbname="task"
+table_layout="(id int not null auto_increment, primary key(id), name varchar(255), description text)"
+action=$1
+list_name=$2
+name=$3
+id=$3
+desc=$4
+
+if [[ $# -lt 1 ]]  # if there is less then 1 argument passed then echo : 
+then
+
+echo "*****************************************"
+echo "Task Application By n0rb" 
+echo "*****************************************"
+echo ""
+echo "Install application :$ task install"
+echo ""
+echo " Usage:"
+echo " task (new-list|del-list|add|del|ls)"
+echo " new-list: create a new list"
+echo " del-list: delete a list"
+echo " add: task add list_name task_name task_description - create a new task"
+echo " del: task del list_name task_id deletes a working task"
+echo " ls: task ls - lists tasks, task ls list_name, lists tasks in a list" 
+echo ""
+echo ""
+echo ""
+fi
+
+function create_list {
+	echo create table $list_name$table_layout | mysql $dbname
+}
+
+function add_task {
+	echo 'insert into '${list_name}' (name, description) values ("'${name}'", "'${desc}'")' | mysql $dbname
+}
+
+show_lists() {
+	#function lists all lists
+	#function lists tasks in a list if list name set
+	if [[ -z ${list_name} ]] # -z is if list_name is not set
+	then
+		echo show tables | mysql $dbname
+	else
+
+		echo select * from ${list_name} | mysql $dbname
+	fi
+}
+
+delete_task() {
+	echo delete from ${list_name} where id=$id | mysql $dbname
+}
+
+delete_list() {
+	echo drop table ${list_name} | mysql $dbname
+}
+
+case $action in 	#if action
+	new-list)	#equals new-list
+		create_list
+	;;
+	del-list)
+		delete_list
+	;;
+	add)
+		add_task
+	;;
+	del)	
+		delete_task
+	;;
+	ls)
+		show_lists
+	;;
+esac
