@@ -12,7 +12,7 @@ if [[ $# -lt 1 ]]  # if there is less then 1 argument passed then echo :
 then
 
 echo "*****************************************"
-echo "Task Application By n0rb" 
+echo "Task Application By n0rbertt" 
 echo "*****************************************"
 echo ""
 echo "Install application :$ task install"
